@@ -13,13 +13,14 @@ mongoose
   .catch((err) => console.log(err, "error en la conexion"));
 
 const app = express(); //  app is an object
+app.use(express.json()); // !middleware MIDDLEWARE OARA QUE SE PUEDA ENVIAR DATOS DE FORMA JSON, Y QUE ESTA ANTES DE NUESTROS RUTEOS!!   PERMITE PARSEAR POR SI LLEGA EL BODY Y PODEMOS TRABAJR CON EL .
 const PORT = process.env.PORT || 3300;
 
 const userRouter = require("./routes/userRouter");
 
 // localHost
 app.get("/", (__, res) => {
-  res.json({ message: "Backend is working" });
+  res.json({ message: "Backend  NO SQL -G8 is working 😎" });
 });
 // =====================================================
 app.use("/users", userRouter);

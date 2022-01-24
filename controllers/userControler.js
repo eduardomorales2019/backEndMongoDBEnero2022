@@ -20,6 +20,7 @@ module.exports = {
   //! se crea una nueva instancia de la coleccion de mongo, que ya esta definida en el modelo por defecto
   create: async (req, res) => {
     try {
+      // console.log("Body", req.body);
       const newUser = await User.create(req.body);
       res.status(201).json({ message: "user created", user: newUser });
     } catch (err) {

@@ -8,8 +8,8 @@ const { Schema } = mongoose;
 // Se de fine aqi los campos de nuestra tabla  y en en mongo se llama, coleccion .
 const userSchema = new Schema({
   name: String,
-  lastName: { type: String, required: true, default: "lastName", unique: true },
-  email: { type: String, unique: true, required: true },
+  lastName: { type: String, unique: true, required: true },
+  email: { type: String, unique: true },
 
   age: {
     type: Number,
