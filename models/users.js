@@ -21,6 +21,7 @@ const userSchema = new Schema({
     default: "USER",
     enum: ["USER", "ADMIN", "SELLER"],
   },
+  isActive: { type: Boolean, default: true },
 
   //!COMMENTS ALGO PODEREOSO EN LOS BASES DE DATOS NO RELACIONALES
   // commets : [{ body: String, date: Date.now(), age:date.now() }],

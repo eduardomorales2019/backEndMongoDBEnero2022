@@ -8,7 +8,11 @@ module.exports = {
   findAll: async (req, res) => {
     try {
       const allUsers = await User.find();
-      res.status(200).json(allUsers);
+      // ===========
+      // const isActive = await User.find({ isActive: true });
+      // ===========
+      // res.status(200).json(isActive); // ! PARA SOLO BSUCAR LOS ACTIVOS
+      res.status(200).json(allUsers); // ! Lols users
     } catch (error) {
       {
         res.status(500).json({ message: "Error al obtener los usuarios" });
@@ -48,24 +52,12 @@ module.exports = {
         .json({ message: "Error user not found, error", error: err });
     }
   },
-  // ========================Delete by id ============================
-  deleteById: async (req, res) => {
-    try {
-      const { id } = req.params.id;
-      const user = await User.findByIdAndDelete(id);
-      res.status(200).json({ message: "user deleted", user });
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Error al eliminar el usuario", error: err });
-    }
-  },
   // ========================Update by id ============================
   update: async (req, res) => {
     try {
       const { id } = req.params;
       const user = await User.updateOne(id, req.body, {
-        new: true,
+        new: true, // ! para que retorne el nuevo objeto en el caso de que se haya actualizado
       });
       res.status(200).json({ message: "user updated", user });
     } catch (err) {
@@ -74,7 +66,7 @@ module.exports = {
         .json({ message: "Error al actualizar el usuario", error: err });
     }
   },
-  // ========================patch ============================
+  // ========================patch  by============================
   upDateOnebyID: async (req, res) => {
     try {
       const { id } = req.params;
@@ -84,6 +76,40 @@ module.exports = {
       res
         .status(500)
         .json({ message: "Error al actualizar el usuario", error: err });
+    }
+  },
+  // ========================Delete by id  BORRADO FISICO============================
+  deleteById: async (req, res) => {
+    const { id } = req.params;
+    console.log(id, "id in paramas ");
+    try {
+      const userDeleted = await User.findByIdAndDelete(id);
+
+      console.log(userDeleted, " SOY user deleted");
+      res.status(200).json({ message: "user deleted", userDeleted_id }); // ? userDeleted_id PARA QUE NO ME MUESTRE EL ID
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Error al eliminar el usuario", error: err });
+    }
+  },
+  // ========================Delete borado logico============================
+  SoftDelete: async (req, res) => {
+    const id = req.params.id;
+    console.log(id, "id in paramas ");
+    try {
+      const userSoftDeleted = await User.findByIdAndUpdate(
+        id,
+        { isActive: false }, // ! para que no se borre fisicamente
+        { new: true } // ! para que retorne el nuevo objeto en el caso de que se haya actualizado
+      );
+      console.log(userSoftDeleted, " SOY user deleted");
+
+      res.status(200).json({ message: "user deleted succefully " });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Error al eliminar el usuario", error: err });
     }
   },
 };
