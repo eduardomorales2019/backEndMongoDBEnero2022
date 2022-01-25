@@ -17,13 +17,14 @@ app.use(express.json()); // !middleware MIDDLEWARE OARA QUE SE PUEDA ENVIAR DATO
 const PORT = process.env.PORT || 3300;
 
 const userRouter = require("./routes/userRouter");
-
+const itemRouter = require("./routes/itemRouter");
 // localHost
 app.get("/", (__, res) => {
   res.json({ message: "Backend  NO SQL -G8 is working 😎" });
 });
 // =====================================================
 app.use("/users", userRouter);
+app.use("/items", itemRouter);
 
 // =====================================================
 
