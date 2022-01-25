@@ -18,6 +18,14 @@ const ItemSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  updateAt: {
+    type: Date,
+    default: new Date(),
+  },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 const Item = mongoose.model("Item", ItemSchema); // mongo agrgara el plural de item en compose

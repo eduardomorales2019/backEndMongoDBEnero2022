@@ -17,7 +17,7 @@ const TicketSchema = new Schema({
   item: [
     {
       //! aqui se puede definir una relacion de muchos a muchos, que es un areglo  de objetos, pero en este array  pero definimos los daos de cada item
-      type: moongose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Item", // referencia a la coleccion de items
       required: true,
     },
@@ -34,6 +34,6 @@ const TicketSchema = new Schema({
   },
 });
 
-const Ticket = mongoose.model("Ticket", ItemSchema); // mongo agrgara el plural de item en compose
+const Ticket = mongoose.model("Ticket", TicketSchema); // mongo agrgara el plural de item en compose
 
 module.exports = Ticket;

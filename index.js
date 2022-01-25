@@ -18,13 +18,15 @@ const PORT = process.env.PORT || 3300;
 
 const userRouter = require("./routes/userRouter");
 const itemRouter = require("./routes/itemRouter");
+const ticketRouter = require("./routes/ticketRouter");
 // localHost
 app.get("/", (__, res) => {
   res.json({ message: "Backend  NO SQL -G8 is working 😎" });
 });
-// =====================================================
+// ========index aqui lo pusimos y no lo creamos en en index en router  =============================================
 app.use("/users", userRouter);
 app.use("/items", itemRouter);
+app.use("/tickets", ticketRouter);
 
 // =====================================================
 

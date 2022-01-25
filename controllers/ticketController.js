@@ -1,4 +1,4 @@
-const Item = require("/Users/eduardomorales/Documents/DEVF SA DE CV /KataBackMongoDB/api-mongo-express/models/item.js");
+const Ticket = require("../models/ticket");
 
 // usado la sintaxis como crete usando la exportacion de un  objeto y dentro una funcion y asi exportarlo
 
@@ -7,16 +7,14 @@ module.exports = {
   // =========================find all ==============
   findAll: async (req, res) => {
     try {
-      //const allItem = await User.find();
+      const allActiveTickets = await Ticket.find();
       // ===========
-      const isActiveItems = await Item.find({ isActive: true });
-      if (!isActiveItems.length) {
-        res.json({ message: "No hay items disponibles" });
-      } else {
-        // ===========
-        res.status(200).json({ message: "all Items", isActiveItems }); // ! PARA SOLO BSUCAR LOS ACTIVOS
-        //res.status(200).json(allItem);
-      }
+      // const isActive = await Ticket.find({ isActive: true });
+      // ===========
+      // res.status(200).json(isActive); // ! PARA SOLO BSUCAR LOS ACTIVOS
+      res
+        .status(200)
+        .json({ message: "all tickets", tickets: allActiveTickets }); // ! Lols Tickets
     } catch (error) {
       {
         res.status(500).json({ message: "Error al obtener los usuarios" });
@@ -28,10 +26,10 @@ module.exports = {
   create: async (req, res) => {
     try {
       // console.log("Body", req.body);
-      const newItem = await Item.create(req.body);
-      res.status(201).json({ message: "Itemcreated", Item: newItem });
+      const newTicket = await Ticket.create(req.body);
+      res.status(201).json({ message: "Ticket created", Ticket: newTicket });
     } catch (err) {
-      res.status(400).json({ message: "error creatig Item", error: err });
+      res.status(400).json({ message: "error creating Ticket ", error: err });
     }
   },
   // ========================find one by id  ============================
@@ -39,47 +37,49 @@ module.exports = {
     const { id } = req.params;
     console.log(id, "id in paramas ");
     try {
-      const ItemFound = await Item.findById(id);
-      if (ItemFound) {
+      const TicketFound = await Ticket.findById(id);
+      if (!TicketFound) {
         // en lugar que sea === null
         res.status(404).json({
-          message: "Item encontrado por el sistema ",
-          Item: ItemFound,
+          message: "Ticket no encontrado por el sistema ",
+          Ticket: TicketFound,
         });
       } else {
-        res.status(200).json({ message: "Itemencontrado", item: ItemFound });
+        res
+          .status(200)
+          .json({ message: "Ticket encontrado", Ticket: TicketFound });
       }
     } catch (err) {
       console.log(err);
       res
         .status(500)
-        .json({ message: "Error Item not found, error", error: err });
+        .json({ message: "Error Ticket not found, error", error: err });
     }
   },
   // ========================Update by id ============================
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const Item = await Item.updateOne(id, req.body, {
+      const Ticket = await Ticket.updateOne(id, req.body, {
         new: true, // ! para que retorne el nuevo objeto en el caso de que se haya actualizado
       });
-      res.status(200).json({ message: "Itemupdated", Item });
+      res.status(200).json({ message: "Ticket updated", Ticket });
     } catch (err) {
       res
         .status(500)
-        .json({ message: "Error al actualizar el usuario", error: err });
+        .json({ message: "Error al actualizar el ticket", error: err });
     }
   },
   // ========================patch  by============================
   upDateOnebyID: async (req, res) => {
     try {
       const { id } = req.params;
-      const ItemUpDate = await Item.findByIdAndUpdate(id, req.body); //! SIEMPRE HAY QUE MANDAR EL BODY EN  UPDATE DE UN PATCH O PUT
-      res.status(200).json({ message: "Itemupdated", ItemUpDate });
+      const TicketUpDate = await Ticket.findByIdAndUpdate(id, req.body); //! SIEMPRE HAY QUE MANDAR EL BODY EN  UPDATE DE UN PATCH O PUT
+      res.status(200).json({ message: "Ticket updated", TicketUpDate });
     } catch (err) {
       res
         .status(500)
-        .json({ message: "Error al actualizar el Item", error: err });
+        .json({ message: "Error al actualizar el ticket", error: err });
     }
   },
   // ========================Delete by id  BORRADO FISICO============================
@@ -87,14 +87,14 @@ module.exports = {
     const { id } = req.params;
     console.log(id, "id in paramas ");
     try {
-      const ItemDeleted = await Item.findByIdAndDelete(id);
+      const TicketDeleted = await Ticket.findByIdAndDelete(id);
 
-      console.log(ItemDeleted, " SOY Itemdeleted");
-      res.status(200).json({ message: "Itemdeleted", ItemDeleted_id }); // ? ItemDeleted_id PARA QUE NO ME MUESTRE EL ID
+      console.log(TicketDeleted, " SOY Ticket deleted");
+      res.status(200).json({ message: "Ticket deleted", TicketDeleted_id }); // ? TicketDeleted_id PARA QUE NO ME MUESTRE EL ID
     } catch (err) {
       res
         .status(500)
-        .json({ message: "Error al eliminar el Item", error: err });
+        .json({ message: "Error al eliminar el usuario", error: err });
     }
   },
   // ========================Delete borado logico============================
@@ -102,14 +102,14 @@ module.exports = {
     const id = req.params.id;
     console.log(id, "id in paramas ");
     try {
-      const ItemSoftDeleted = await Item.findByIdAndUpdate(
+      const TicketSoftDeleted = await Ticket.findByIdAndUpdate(
         id,
         { isActive: false }, // ! para que no se borre fisicamente
         { new: true } // ! para que retorne el nuevo objeto en el caso de que se haya actualizado
       );
-      console.log(ItemSoftDeleted, " SOY Itemdeleted");
+      console.log(TicketSoftDeleted, " SOY Ticket deleted");
 
-      res.status(200).json({ message: "Itemdeleted succefully " });
+      res.status(200).json({ message: "Ticket deleted succefully " });
     } catch (err) {
       res
         .status(500)
