@@ -153,34 +153,30 @@ module.exports = {
       //? AQUI SE HACE LA OPERACION DE CALCULO DE IVA CON LA ITERACION DE LOS ITEMS CON REDUCE
       const subtotal = TicketFound.item.reduce((acc, item) => {
         //? aqui es esl respuesta del populate item y user ojojoj
+        console.log(item, " SOY ITEM del reduce");
         return acc + item.price;
       }, 0);
+      const totalTaxes = (subtotal * taxes) / 100;
+      const totalPrice = subtotal + totalTaxes;
       console.log(subtotal, " soy subtotal");
-      const taxesFinally = (subtotal * taxes) / 100;
-      console.log(taxesFinally, " soy taxes");
-      const totalPrice = subtotal + taxesFinally;
+      console.log(totalTaxes, " soy taxes");
       console.log(totalPrice, " soy totalPRICE! ");
       // // //! ===========
 
       //! ACTUALIZAR VALORES N EL TICKET, TAXES Y TOTAL EN E TICKET DE LA BASE!!
 
-      //? LLAMAR AL METODO DE MONGIOSE QUE HACE ESO.
+      //? LLAMAR AL METODO DE MONGoOSE QUE HACE ESO.
       //! SIEMPRE HAY QUE MANDAR EL BODY EN  UPDATE DE UN PATCH O PUT}
       const ticketUpdated = await Ticket.findByIdAndUpdate(
         id,
-        {
-          subtotal,
-          taxesFinally,
-          // taxes: subtotal + taxesFinally,
-        },
+        //{ subtotal, totalTaxes, totalPrice },
+        { subtotal, Iva: totalTaxes, total: totalPrice },
         { new: true }
       );
       console.log(ticketUpdated, " SOY Ticket updated");
 
       //? AQUI ESTOY REGRESANDO EL TICKET ACTUALIZADO Y EL TIKCET NORMAL!
-      res
-        .status(200)
-        .json({ message: "temporaly response", TicketFound, ticketUpdated });
+      res.status(200).json({ message: "ticket ACTUALIZADO ", ticketUpdated });
     } catch (err) {
       console.log(err);
       res
