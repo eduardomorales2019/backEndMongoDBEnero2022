@@ -26,9 +26,9 @@ const TicketSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  usuarios: {
+  user: {
     //  aqui seria muchos a uno  de usuarios
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User", // ! referncia a la coleccion de usuarios
     required: true,
   },

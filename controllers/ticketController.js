@@ -116,4 +116,76 @@ module.exports = {
         .json({ message: "Error al eliminar el usuario", error: err });
     }
   },
+  // ========================iva  ============================
+  calculateTaxes: async (req, res) => {
+    //? 1. ENCONTRAR EL TYICKET POR ID xx
+    //? 2.  RECUPERAR LOS ITEMS DEL TICKET  NECESITANDO EL PRECIO xx populate!!!
+    //? 3.  CALCULAR EL IVA Y TOTAL DE CADA ITEM, HACER OPERACIONES.
+    //? 4.  ACTUALIZAR EL TICKET
+    //? 5.  RETORNAR EL TICKET ACTUALIZADO
+
+    const { id } = req.params;
+    try {
+      console.log(id, "id in paramas ");
+      // ====info asociada === para recuperar el id del ticket
+      // metodo de populate que esta posterior en el codigo >>>>------
+      // ============================
+
+      const TicketFound = await Ticket.findById(id)
+        .populate("item")
+        .populate("user");
+      // ! para recuperar el id del ticket
+      // //! ===== hjacer operaciones de subtotal, taxes, total
+      //
+
+      const taxes = 10;
+      // console.log(TicketFound, " SOY Ticket found");
+      // const priceTicket = TicketFound.item[0].price;
+      // console.log(priceTicket, " soy precio del ticket");
+      // const taxesFinally = (priceTicket * taxes) / 100;
+      // console.log(taxesFinally, " soy taxes");
+      // const totalPrice = priceTicket + taxesFinally;
+      // console.log(totalPrice, " soy total");
+      // //! ===========
+      // res.item = TicketFound.item[0].price;
+      // console.log(TicketFound.item[0].price, " SOY Ticket found");
+      // //! ===========
+      //? AQUI SE HACE LA OPERACION DE CALCULO DE IVA CON LA ITERACION DE LOS ITEMS CON REDUCE
+      const subtotal = TicketFound.item.reduce((acc, item) => {
+        //? aqui es esl respuesta del populate item y user ojojoj
+        return acc + item.price;
+      }, 0);
+      console.log(subtotal, " soy subtotal");
+      const taxesFinally = (subtotal * taxes) / 100;
+      console.log(taxesFinally, " soy taxes");
+      const totalPrice = subtotal + taxesFinally;
+      console.log(totalPrice, " soy totalPRICE! ");
+      // // //! ===========
+
+      //! ACTUALIZAR VALORES N EL TICKET, TAXES Y TOTAL EN E TICKET DE LA BASE!!
+
+      //? LLAMAR AL METODO DE MONGIOSE QUE HACE ESO.
+      //! SIEMPRE HAY QUE MANDAR EL BODY EN  UPDATE DE UN PATCH O PUT}
+      const ticketUpdated = await Ticket.findByIdAndUpdate(
+        id,
+        {
+          subtotal,
+          taxesFinally,
+          // taxes: subtotal + taxesFinally,
+        },
+        { new: true }
+      );
+      console.log(ticketUpdated, " SOY Ticket updated");
+
+      //? AQUI ESTOY REGRESANDO EL TICKET ACTUALIZADO Y EL TIKCET NORMAL!
+      res
+        .status(200)
+        .json({ message: "temporaly response", TicketFound, ticketUpdated });
+    } catch (err) {
+      console.log(err);
+      res
+        .status(500)
+        .json({ message: "Error al calcular el  los taxes", error: err });
+    }
+  },
 };
