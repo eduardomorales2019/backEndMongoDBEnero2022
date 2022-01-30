@@ -137,7 +137,7 @@ module.exports = {
       // ! para recuperar el id del ticket
       // //! ===== hjacer operaciones de subtotal, taxes, total
       //
-
+      console.log(TicketFound, "SOY EL TICKET FOund ");
       const taxes = 10;
       // console.log(TicketFound, " SOY Ticket found");
       // const priceTicket = TicketFound.item[0].price;
@@ -169,7 +169,7 @@ module.exports = {
       //! SIEMPRE HAY QUE MANDAR EL BODY EN  UPDATE DE UN PATCH O PUT}
       const ticketUpdated = await Ticket.findByIdAndUpdate(
         id,
-        //{ subtotal, totalTaxes, totalPrice },
+        //{ subtotal, totalTaxes, totalPrice }, ojo poner VALORES IGAUALES A LOS QUE SE CALCULAN EN JSON
         { subtotal, Iva: totalTaxes, total: totalPrice },
         { new: true }
       );

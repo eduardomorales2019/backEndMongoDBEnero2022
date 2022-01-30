@@ -1,9 +1,31 @@
 // importar mongoose
 const mongoose = require("mongoose");
-
+const { Post, PostSchema } = require("../models/post");
 // importar schema de mongoose
 
 const { Schema } = mongoose;
+
+// =============================schema de los post  =
+// const postSchema = {
+//   title: {
+//     type: String,
+//     required: true,
+//   },
+//   body: {
+//     type: String,
+//     required: true,
+//   },
+//   date: {
+//     type: Date,
+//     default: Date.now,
+//   },
+//   isActive: {
+//     type: Boolean,
+//     default: true,
+//   },
+// };
+
+// ==============================
 // defino el esquema de la coleccion
 // Se de fine aqi los campos de nuestra tabla  y en en mongo se llama, coleccion .
 const userSchema = new Schema({
@@ -22,6 +44,7 @@ const userSchema = new Schema({
     enum: ["USER", "ADMIN", "SELLER"],
   },
   isActive: { type: Boolean, default: true },
+  post: [PostSchema], // aqui se puede agregar mas de una coleccion y el subdocumentos del documento, el cual es un aray de post
 
   //!COMMENTS ALGO PODEREOSO EN LOS BASES DE DATOS NO RELACIONALES
   // commets : [{ body: String, date: Date.now(), age:date.now() }],

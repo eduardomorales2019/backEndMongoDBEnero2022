@@ -19,5 +19,10 @@ router.delete("/:id", userController.deleteById);
 // ========================delete logico=  mediante na bandera, flag, cambiar, is active===========================
 router.delete("/:id/Soft-Delete", userController.SoftDelete); //  /:id/Soft-Delete
 
+//! ===============SUBR UTA DE USUARIOS, RUTAS DE POSTS MODELO POST===========================
+router.post("/post/:id", userController.createPost);
+
+router.get("/post/:id", userController.findAllPost);
+router.delete("/post/:id", userController.deletePostById);
 // =========================
 module.exports = router;

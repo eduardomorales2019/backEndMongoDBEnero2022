@@ -1,5 +1,6 @@
 const User = require("../models/users");
-
+const { Post } = require("../models/post");
+const user = require("../models/users");
 // usado la sintaxis como crete usando la exportacion de un  objeto y dentro una funcion y asi exportarlo
 
 module.exports = {
@@ -35,6 +36,7 @@ module.exports = {
     const { id } = req.params;
     console.log(id, "id in paramas ");
     try {
+      // const userFound = await User.findById(id, { isActive: true });
       const userFound = await User.findById(id);
       if (!userFound) {
         // en lugar que sea === null
@@ -43,7 +45,9 @@ module.exports = {
           user: userFound,
         });
       } else {
-        res.status(200).json({ message: "User encontrado", user: userFound });
+        res
+          .status(200)
+          .json({ message: "User encontrado or inactivo", user: userFound });
       }
     } catch (err) {
       console.log(err);
@@ -110,6 +114,75 @@ module.exports = {
       res
         .status(500)
         .json({ message: "Error al eliminar el usuario", error: err });
+    }
+  },
+
+  // ========================post create============================
+  //! se crea una nueva instancia de la coleccion de mongo, que ya esta definida en el modelo por defecto
+  createPost: async (req, res) => {
+    //!pendiente  pasar param is active!
+    const { id } = req.params;
+    try {
+      console.log(id, "Soy id en el params here!!!");
+      const userFound = await User.findById(id);
+      console.log(userFound, "SOY user found");
+      if (!userFound)
+        res.status(404).json({ message: "User no encontrado por el sistema " });
+      //? AQUI CREAMOS EL POST===========================
+      // creamo la instancia de POST
+      const newPost = new Post(req.body);
+      //userFound[0].post.push(newPost); // esta se agrega a la utima posisicon del arreglo.
+      //
+      userFound.post.push(newPost);
+      // hay que forzar el save para que se guarde en la base de datos como documento embebido, como subdocumentso y no como una propiedad y se guarde en la base de datos
+      await userFound.save(); // mongo detecta que a este usuario le agrego este subdocumeto. y lo guarda en la base de datos
+      // await newPost.save(); // MODO GUARDO POST EN LA BASE DE DATOS
+      //! =============================================
+      //ojo  al relizar el save de post o modelo newpost.  se guarda en la base de datos como un documento embebido, como subdocumentso y no como una propiedad y se guarda en la base de datos y ya que  se giuarda en el archivo de user.js
+
+      //! =============================================
+      //Este seria el HardCode, directo
+      // userFound.post = { title: "hola", body: "Cuerpo informacion" };
+      res
+        .status(200)
+        //.json({ message: "post created succefully ", user: newPost }); //! modo guardo POST
+        .json({ message: "post created succefully ", user: userFound });
+      //!! este era el problema de los headers sent already to the client, can be sent twice!!
+      // return res
+      //   .status(200)
+      //   .json({ message: "User encontrado or inactivo", user: userFound });
+    } catch (err) {
+      console.log(err, "soy error. here!!!");
+      res.status(500).json({ message: "error creatig post ", error: err });
+    }
+  },
+  // ========================get all posts by id============================
+  findAllPost: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const UserFound = await User.findOne({ id, isActive: true });
+      res
+        .status(200)
+        .json({ message: "User encontrado or inactivo", user: UserFound });
+    } catch (err) {
+      console.log(err, "soy error. here!!!");
+      res
+        .status(500)
+        .json({ message: "Error al obtener los posts", error: err });
+    }
+  },
+  // ======================== delete posts by id============================
+  deletePostById: async (req, res) => {
+    const { id } = req.params;
+    console.log(id, "id in paramas ");
+    try {
+      userFound = await User.deleteOne({ _id: id });
+      res.status(200).json({ message: "post deleted succefully " });
+    } catch (err) {
+      console.log(err, "soy error. here!!!");
+      res
+        .status(500)
+        .json({ message: "Error al eliminar el post", error: err });
     }
   },
 };
