@@ -296,4 +296,6 @@ module.exports = {
       res.status(500).json({ message: "Error deleted user post", error });
     }
   },
+
+  FuncionGitmerge: async (req, res) => {},
 };
