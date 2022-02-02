@@ -20,9 +20,16 @@ router.delete("/:id", userController.deleteById);
 router.delete("/:id/Soft-Delete", userController.SoftDelete); //  /:id/Soft-Delete
 
 //! ===============SUBR UTA DE USUARIOS, RUTAS DE POSTS MODELO POST===========================
+// ora trefactor de los metodos corregidos usar middleware  findUSER !!!( que es encontrar el usuario. )
+// CREATE
 router.post("/post/:id", userController.createPost);
-
+//FIND ALL
 router.get("/post/:id", userController.findAllPost);
-router.delete("/post/:id", userController.deletePostById);
+// FIND ONE  post by id
+router.get("/post/:id/:postId", userController.findOnePostById);
+// UPDATE ONE
+router.patch("/post/:id/:postId", userController.updateOnePost);
+// DELETE ONE LOGICO.
+router.delete("/post/:id/:postId", userController.softPostDelete);
 // =========================
 module.exports = router;
