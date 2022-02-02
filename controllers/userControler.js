@@ -297,5 +297,8 @@ module.exports = {
     }
   },
 
-  FuncionGitmerge: async (req, res) => {},
+  FuncionGitmerge: async (req, res) => {
+    try {
+    } catch (error) {}
+  },
 };
